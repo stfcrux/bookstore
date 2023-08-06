@@ -25,9 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/").hasRole("USER")
             .and().formLogin();
 
-        // Settings to Enable H2 console access
+        // Settings to Enable easy H2 console and postman access for testing
         http.csrf().ignoringAntMatchers("/h2-console/**");
         http.headers().frameOptions().sameOrigin();
+        http.csrf().disable();
     }
 	
 	//Hard code USER and Admin Account for Proof of concept test

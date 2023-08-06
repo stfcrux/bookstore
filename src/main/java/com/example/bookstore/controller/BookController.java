@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.DTO.BookDTO;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.service.BookService;
 
@@ -29,7 +30,16 @@ public class BookController {
 
     @GetMapping("/get/{isbn}")
     public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
-        return new ResponseEntity<>(bookService.findBookByIsbn(isbn),HttpStatus.OK);
+    	
+    	if (bookService.findBookByIsbn(isbn) == null) {
+    		
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		
+    	}else {
+    	
+    		return new ResponseEntity<>(bookService.findBookByIsbn(isbn),HttpStatus.OK);
+    	
+    	}
     }
     
     @GetMapping("/search")
@@ -38,23 +48,54 @@ public class BookController {
             @RequestParam String authorName) {
         return new ResponseEntity<>(bookService.findBooksByTitleAndAuthor(title, authorName),HttpStatus.OK);
     }
-
-    @PostMapping
-    public ResponseEntity<Void> addBook(@RequestBody Book book) {
-        bookService.saveBook(book);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    
+    @PostMapping("/add")
+    public ResponseEntity<Void> addBook(@RequestBody BookDTO book) {
+    	
+    	if (bookService.findBookByIsbn(book.getIsbn()) != null) {
+    		
+    		return new ResponseEntity<>(HttpStatus.CONFLICT);
+    		
+    	}else {
+    	
+    		bookService.saveBook(book);
+    		return new ResponseEntity<>(HttpStatus.CREATED);
+    	}
     }
 
     @PutMapping("/update/{isbn}")
-    public ResponseEntity<Void> updateBook(@PathVariable String isbn, @RequestBody Book book) {   	
-        bookService.saveBook(book);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> updateBook(@PathVariable String isbn, @RequestBody BookDTO book) {   	
+        
+    	
+    	if (bookService.findBookByIsbn(isbn) == null) {
+    		
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		
+    	}else {
+    		
+    		bookService.saveBook(book);
+            return new ResponseEntity<>(HttpStatus.OK);
+    		
+    	}
+    	
+    	
     }
-
+    
+    
+    // handled security in security class, only admin allowed to access
     @DeleteMapping("/delete/{isbn}")
     public ResponseEntity<Void> deleteBook(@PathVariable String isbn) {
-        bookService.deleteBook(isbn);
-        return new ResponseEntity<>(HttpStatus.OK);
+    	
+    	if (bookService.findBookByIsbn(isbn) == null) {
+    		
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		
+    	}else {
+    		
+    		bookService.deleteBook(isbn);
+            return new ResponseEntity<>(HttpStatus.OK);
+    		
+    	}
     }
 	
 
