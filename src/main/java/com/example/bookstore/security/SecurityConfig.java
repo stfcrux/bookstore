@@ -28,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Settings to Enable easy H2 console and postman access for testing
         http.csrf().ignoringAntMatchers("/h2-console/**");
         http.headers().frameOptions().sameOrigin();
-        http.csrf().disable();
     }
 	
 	//Hard code USER and Admin Account for Proof of concept test

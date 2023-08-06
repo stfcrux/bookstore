@@ -1,4 +1,4 @@
-package com.example.DTO;
+package com.example.bookstore.DTO;
 
 import java.util.List;
 

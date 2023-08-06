@@ -15,5 +15,9 @@ public interface BookRepository extends JpaRepository<Book, String> {
 	@Query("SELECT b FROM Book b JOIN b.authors a WHERE a.name IN ?2 " +
           "AND b.title = ?1")
 	List<Book> findByTitleAndAuthorsName(String title, String authorName);
+	
+	List<Book> findByAuthorsName(String authorName);
+	
+	List<Book> findByTitle(String title);
     
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.DTO.BookDTO;
+import com.example.bookstore.DTO.BookDTO;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.repository.BookRepository;
 
@@ -21,8 +21,19 @@ public class BookService {
         return bookRepository.findById(isbn).orElse(null);
     }
 
-    public List<Book> findBooksByTitleAndAuthor(String title, String authorName) {  
-        return bookRepository.findByTitleAndAuthorsName(title, authorName);
+    public List<Book> findBooksByTitleAndAuthor(String title, String authorName) {
+    	
+    	List<Book> books = null;
+    	
+    	if(!title.isEmpty() && !authorName.isEmpty()) {
+			books=bookRepository.findByTitleAndAuthorsName(title, authorName);
+		}else if(title.isEmpty()) {
+			books=bookRepository.findByAuthorsName(authorName);
+		}else if(authorName.isEmpty()) {
+			books=bookRepository.findByTitle(title);
+		}
+    	
+        return books;
     }
 
     public void saveBook(BookDTO book) {

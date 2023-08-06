@@ -40,7 +40,6 @@ public class Book {
     		joinColumns = @JoinColumn(name = "author"),
     		inverseJoinColumns = @JoinColumn(name = "isbn")	
     )
-    
     private List<Author> authors;
     
     //due to h2 having year as a keyword
