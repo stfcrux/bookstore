@@ -17,18 +17,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	// only allow admin user to access the delete endpoint
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-        	//Allow access to H2 console for testing
-            .antMatchers("/h2-console/**").permitAll()
-            .antMatchers("/api/books/delete").hasRole("ADMIN")
-            .antMatchers("/").hasRole("USER")
-            .and().formLogin();
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+        		//Allow access to H2 console for testing
+            		.antMatchers("/h2-console/**").permitAll()
+            		.antMatchers("/api/books/delete/**").hasRole("ADMIN")
+            		.antMatchers("/**").hasRole("USER")
+			//Use Http Basic for postman
+            		.and().httpBasic();
 
-        // Settings to Enable easy H2 console and postman access for testing
-        http.csrf().ignoringAntMatchers("/h2-console/**");
-        http.headers().frameOptions().sameOrigin();
-    }
+        	// Settings to Enable easy H2 console and postman access for testing
+        	http.csrf().disable();
+        	http.headers().frameOptions().sameOrigin();
+    	}
 	
 	//Hard code USER and Admin Account for Proof of concept test
 	@Override
